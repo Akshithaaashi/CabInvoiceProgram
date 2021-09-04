@@ -1,21 +1,47 @@
 package CabInvoiceGenerator;
 
+
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.List;
+
 public class CabServiceTest {
+    private static CabService cabService;
 
 
+    @Before
+    public void setup(){
+        cabService = new CabService();
+    }
+
     @Test
-    public void givenDistanceAndTime_whenCostPerKilometrePerMin_shouldReturnTotalFare() {
-        CabService cabInvoice = new CabService();
-        double totalFare = cabInvoice.totalFareOfJourney(7,15);
-        Assert.assertEquals(85,totalFare, 0.0);
+    public void givenDistanceAndTimeShouldReturnTotalFare(){
+        double distance = 10;
+        int time = 15;
+        double totalFare = cabService.invoiceGenerator(distance,time);
+        Assert.assertEquals(115.0,totalFare,0.0);
+
     }
     @Test
-    public void givenDistanceAndTime_whenCostPerKilometrePerMin_shouldReturnMinimumFare() {
-        CabService cabInvoice = new CabService();
-        double totalFare = cabInvoice.totalFareOfJourney(0.1, 2);
-        Assert.assertEquals(5, totalFare, 0.0);
+    public void givenDistanceAndTimeShouldReturnDefaultFare(){
+        double distance = 0.2;
+        int time = 3;
+        double totalFare = cabService.invoiceGenerator(distance,time);
+        Assert.assertEquals(5,totalFare,0.0);
+
     }
+    @Test
+    public void givenMultipleRidesShouldReturnAggregateTotal(){
+        Ride ride1 = new Ride(10.0,15);
+        Ride ride2 = new Ride(20.0,30);
+        List<Ride> rides = Arrays.asList(ride1,ride2);
+        double aggFare = cabService.invoiceGenerator(rides);
+        Assert.assertEquals(345,aggFare,0.0);
+
+    }
+
 }

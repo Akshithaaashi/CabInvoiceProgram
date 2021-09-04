@@ -3,18 +3,25 @@ package CabInvoiceGenerator;
 import java.util.List;
 
 public class CabService {
-    private static final int COST_PER_KM = 10;
-    private static final int COST_PER_MIN = 1;
-    private static final int MINIMUM_COST = 5;
-    public double totalFareOfJourney(double distance, int time) {
-        double cost = (distance*COST_PER_KM) + (time*COST_PER_MIN);
-        if(cost<MINIMUM_COST){
-            return MINIMUM_COST;
+    private static final double COST_PER_KM = 10 ;
+    private static final int COST_PER_MIN =1 ;
+    private static int  MIN_FARE= 5;
+
+    public double invoiceGenerator(double distance, int time) {
+        double totalFare = 0.0;
+        totalFare = distance * COST_PER_KM + time * COST_PER_MIN;
+        if( totalFare < MIN_FARE){
+            totalFare=5;
         }
-        return cost;
+        return totalFare ;
     }
 
-    public static void main(String[] args) {
-        System.out.println("Welcome to CAB INVOICE GENERATOR");
+    public double invoiceGenerator(List<Ride> rides) {
+        double totalFare=0;
+        for (Ride ride : rides){
+            totalFare += this.invoiceGenerator(ride.distance,ride.time);
+            }
+//       double totalFare =(double) rides.stream().map(this :: invoiceGenerator);
+        return totalFare;
     }
 }
